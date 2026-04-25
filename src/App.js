@@ -195,6 +195,7 @@ const [searchTimeout, setSearchTimeout] = useState(null);
       minHeight: "100vh",
       display: "flex",
       justifyContent: "center",
+      alignItems: "center",
       backgroundColor: "#000",
     }}
   >
