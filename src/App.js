@@ -6,12 +6,12 @@ import SettingsPage from "./components/SettingsPage";
 import ForecastPage from "./components/ForecastPage";
 import HourlyForecast from "./components/HourlyForecast";
 import "./App.css";
-import morning1 from "./morning1.jpeg";
-import morning2 from "./morning2.jpeg";
-import afternoon from "./afternoon.jpeg";
-import evening from "./evening1.jpeg";
-import night from "./night.jpeg";
-import cloudy from "./cloudy.jpeg";
+const morning1 = "/images/morning1.jpeg";
+const morning2 = "/images/morning2.jpeg";
+const afternoon = "/images/afternoon.jpeg";
+const evening = "/images/evening1.jpeg";
+const night = "/images/night.jpeg";
+const cloudy = "/images/cloudy.jpeg";
 
 const DEFAULT_CITY = "Bangalore";
 
