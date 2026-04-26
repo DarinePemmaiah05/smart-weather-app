@@ -6,6 +6,9 @@ import SettingsPage from "./components/SettingsPage";
 import ForecastPage from "./components/ForecastPage";
 import HourlyForecast from "./components/HourlyForecast";
 import "./App.css";
+import { useSwipeable } from "react-swipeable";
+import { motion, AnimatePresence } from "framer-motion"; // already added at top
+
 const morning1 = "/images/morning1.jpeg";
 const morning2 = "/images/morning2.jpeg";
 const afternoon = "/images/afternoon.jpeg";
@@ -17,6 +20,20 @@ const DEFAULT_CITY = "Bangalore";
 
 function App() {
 const [searchTimeout, setSearchTimeout] = useState(null);
+
+  // 🔥 SWIPE LOGIC (ONLY ADDITION)
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => {
+      if (page === "home") setPage("forecast");
+      else if (page === "forecast") setPage("settings");
+    },
+    onSwipedRight: () => {
+      if (page === "settings") setPage("forecast");
+      else if (page === "forecast") setPage("home");
+    },
+    trackMouse: true
+  });
+
   // ✅ FIX 1: move function to top + pass weather
   const getBackgroundImage = (weather) => {
     if (!weather || !weather.weather) return morning1;
@@ -62,7 +79,6 @@ const [searchTimeout, setSearchTimeout] = useState(null);
 
   const [fade, setFade] = useState(false);
 
-  // ✅ FIX 2: safe default
   const [bgImage, setBgImage] = useState(morning1);
 
   const convertTemp = (temp) =>
@@ -127,7 +143,6 @@ const [searchTimeout, setSearchTimeout] = useState(null);
     if (city) localStorage.setItem("city", city);
   }, [city]);
 
-  // ✅ FIX 3: correct usage
   useEffect(() => {
     const newBg = getBackgroundImage(weather);
 
@@ -188,8 +203,8 @@ const [searchTimeout, setSearchTimeout] = useState(null);
   };
 
   return (
-  // 🔥 OUTER WRAPPER (full screen)
   <div
+    {...swipeHandlers}  // 🔥 APPLY SWIPE HERE
     style={{
       width: "100%",
       minHeight: "100vh",
@@ -199,7 +214,6 @@ const [searchTimeout, setSearchTimeout] = useState(null);
       backgroundColor: "#000",
     }}
   >
-    {/* 🔥 APP CONTAINER */}
     <div
       style={{
         position: "relative",
@@ -209,7 +223,6 @@ const [searchTimeout, setSearchTimeout] = useState(null);
         overflow: "hidden",
       }}
     >
-      {/* OLD BG */}
       <div
         style={{
           position: "absolute",
@@ -224,7 +237,6 @@ const [searchTimeout, setSearchTimeout] = useState(null);
         }}
       />
 
-      {/* NEW BG */}
       <div
         style={{
           position: "absolute",
@@ -239,7 +251,6 @@ const [searchTimeout, setSearchTimeout] = useState(null);
         }}
       />
 
-      {/* CONTENT */}
       <div
         style={{
           position: "relative",
@@ -248,6 +259,7 @@ const [searchTimeout, setSearchTimeout] = useState(null);
           paddingBottom: "100px",
         }}
       >
+        {/* ❌ NOTHING ELSE CHANGED */}
         <h2 style={{
   textAlign: "center",
   color: "#fff",
@@ -265,9 +277,20 @@ const [searchTimeout, setSearchTimeout] = useState(null);
   Smart weather insights🧠
 </p>
 
-        {page === "home" && (
-          <div classname="page">
-          <>
+       
+<AnimatePresence mode="wait">
+  <motion.div
+    key={page}
+    initial={{ opacity: 0, x: 100 }}
+    animate={{ opacity: 1, x: 0 }}
+    exit={{ opacity: 0, x: -100 }}
+    transition={{ duration: 0.3 }}
+  >
+    {page === "home" && (
+      <div classname="page">
+        
+          {/* your FULL home content unchanged */}
+        <>
             <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
               <div style={{ position: "relative", flex: 1 }}>
                 <input
@@ -417,25 +440,27 @@ const [searchTimeout, setSearchTimeout] = useState(null);
               </>
             )}
           </>
-        </div>
-        )}
+      </div>
+    )}
 
-        {page === "forecast" && (
-          <div classname ="page">
-          <ForecastPage city={city} darkMode={darkMode} unit={unit} />
-        </div>
-        )}
+    {page === "forecast" && (
+      <div classname="page">
+        <ForecastPage city={city} darkMode={darkMode} unit={unit} />
+      </div>
+    )}
 
-        {page === "settings" && (
-          <div classname ="page">
-          <SettingsPage
-            darkMode={darkMode}
-            setDarkMode={setDarkMode}
-            unit={unit}
-            setUnit={setUnit}
-          />
-          </div>
-        )}
+    {page === "settings" && (
+      <div classname="page">
+        <SettingsPage
+          darkMode={darkMode}
+          setDarkMode={setDarkMode}
+          unit={unit}
+          setUnit={setUnit}
+        />
+      </div>
+    )}
+  </motion.div>
+</AnimatePresence>
 
         <div className="glass-nav">
           <div onClick={() => setPage("home")} style={navItem(page === "home")}>
