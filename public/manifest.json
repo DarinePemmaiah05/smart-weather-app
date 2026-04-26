@@ -1,10 +1,6 @@
 {
-  "name": "SkyCast",
   "short_name": "SkyCast",
-  "start_url": ".",
-  "display": "standalone",
-  "background_color": "#000000",
-  "theme_color": "#000000",
+  "name": "SkyCast Weather App",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",
@@ -16,5 +12,9 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#0b1d3a",
+  "background_color": "#0b1d3a"
 }
